@@ -8,12 +8,12 @@ func main() {
 	for i := 0; i < T; i++ {
 		var N int
 		var book []int
+		var words int
 		fmt.Scan(&N)
 		book = make([]int, N)
 		for j := 0; j < N; j++ {
 			fmt.Scan(&book[j])
 		}
-		var words int
 	loop:
 		for j := 0; ; {
 			switch N - j {
@@ -26,12 +26,12 @@ func main() {
 				words += book[j]
 				break loop
 			case 3:
+				words += book[j]
 				if book[j+1] < book[j+2] {
-					words += book[j] + book[j+1]
-				} else {
-					words += book[j] + book[j+2]
+					words += book[j+1]
+					break loop
 				}
-				break loop
+				j += 2
 			default:
 				words += book[j]
 				if book[j+1]+book[j+3] < book[j+2] {
