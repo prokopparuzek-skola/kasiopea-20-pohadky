@@ -1,44 +1,43 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func main() {
 	var T int
 	fmt.Scan(&T)
 	for i := 0; i < T; i++ {
 		var N int
-		var book []int
-		fmt.Scan(&N)
-		book = make([]int, N)
-		for j := 0; j < N; j++ {
-			fmt.Scan(&book[j])
-		}
+		var isRead []bool
+		var sortedBook [][2]int
 		var words int
-	loop:
-		for j := 0; ; {
-			switch N - j {
+		fmt.Scan(&N)
+		sortedBook = make([][2]int, N)
+		isRead = make([]bool, N)
+		for j := range isRead {
+			isRead[j] = true
+		}
+		for j := 0; j < N; j++ {
+			var b int
+			fmt.Scan(&b)
+			sortedBook[j] = [2]int{b, j}
+			words += b
+		}
+		sort.Slice(sortedBook, func(i, j int) bool { return sortedBook[i][0] > sortedBook[j][0] })
+		for _, s := range sortedBook {
+			switch s[1] {
 			case 0:
-				break loop
-			case 1:
-				words += book[j]
-				break loop
-			case 2:
-				words += book[j]
-				break loop
-			case 3:
-				if book[j+1] < book[j+2] {
-					words += book[j] + book[j+1]
-				} else {
-					words += book[j] + book[j+2]
+			case N - 1:
+				if isRead[N-2] {
+					isRead[N-1] = false
+					words -= s[0]
 				}
-				break loop
 			default:
-				words += book[j]
-				if book[j+1]+book[j+3] < book[j+2] {
-					words += book[j+1]
-					j += 3
-				} else {
-					j += 2
+				if isRead[s[1]-1] && isRead[s[1]+1] {
+					isRead[s[1]] = false
+					words -= s[0]
 				}
 			}
 		}
